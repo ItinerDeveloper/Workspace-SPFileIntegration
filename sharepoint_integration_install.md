@@ -49,6 +49,25 @@ Install the SharePoint Integration on the same site as Itiner Workspace (e.g., `
 ### 3.4 Configuration
 Edit the `appsettings.json` file with the following parameters:
 
+#### Host Configuration
+```json
+"Host": {
+  "WebHostUrl": "https://addonhostdnsname/workspace/emailworker",
+  "WSUrl": "http://workspacehostdnsname/workspace/api",
+  "WsApiKey": "test", // API key generated for integration user
+  "HealthCheckBaseUrl": "http://addonhostdnsname", // optional
+  "CustomApiKey": "test",
+  "PathBase": "/workspace/emailworker",
+  "DebugMode": false,
+  "DisableRequestLog": false,
+  "DisableMetadata": true,
+  "VariablePrefix": "" // Ensures compatibility when the workflow sending events to the integration service is an embedded workflow and uses prefixed variable names.
+},
+"Storage": {
+        "Password": "test" // This password has to match with the storage.password value in the Workspace appsettings.json
+    },
+```
+
 #### SharePoint Specific Settings
 `SharePoint/SiteUrl`: URL of the SharePoint site (e.g., `https://domain.sharepoint.com/sites/sitename`).
 
@@ -82,29 +101,45 @@ For information see: [Register an App in Microsoft Identity Platform](https://le
 ```
 
 #### Reference Filter Configuration
-```json
-"Reference": {
-  "Filter": [] // ["key1", "key2"]
-}
-```
 - **Purpose**: Controls which events the integration service processes based on the `Reference` value in the event.
 - **Behavior**:
   - If the `Filter` list is **not empty**, the integration service will **only process events** that contain a reference included in the `Filter` list.
   - If the `Filter` list is **empty**, the service will process **all events**, regardless of their `Reference` value.
 - **Usage**: Populate the `Filter` list with user-defined keys to restrict the scope of processed events.
 
-
-#### Variable Prefix Configuration
 ```json
-"Host": {
-  "VariablePrefix": "prefix."
+"Reference": {
+  "Filter": ["Email"]
+},
+```
+
+#### Logging (Serilog) Configuration
+```json
+"Serilog": {
+  "Using": ["Serilog.Sinks.Seq"],
+  "LevelSwitches": {
+    "$controlSwitch": "Information"
+  },
+  "MinimumLevel": {
+    "ControlledBy": "$controlSwitch",
+    "Override": {
+      "System": "Warning",
+      "Microsoft": "Error"
+    }
+  },
+  "WriteTo": [{
+    "Name": "Seq",
+    "Args": {
+      "serverUrl": "http://global_seq:5341",
+      "apiKey": ""
+    }
+  }],
+  "Enrich": ["FromLogContext", "WithMachineName", "WithThreadId"],
+  "Properties": {
+    "Application": "EmailWorker"
+  }
 }
 ```
-- **Purpose**: Ensures compatibility when the workflow sending events to the integration service is an embedded workflow and uses prefixed variable names.
-- **Behavior**:
-  - All variables in the embedded workflow will have a prefix in their names.
-  - The integration service requires a matching prefix to correctly interpret these variables.
-- **Usage**: Configure the `VariablePrefix` field with the appropriate prefix used in the workflow.
 
 ### 3.5 Add IIS Web Application
 1. Open IIS Manager.
