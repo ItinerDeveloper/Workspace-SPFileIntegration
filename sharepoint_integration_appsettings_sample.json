@@ -1,0 +1,67 @@
+{
+    "Host": {
+        "WebHostUrl": "https://localhost:5001",
+        "PathBase": "/workspace/spfileintegration",
+        "WSUrl": "http://workspacehost/workspace/api",
+        "DebugMode": false,
+        "DisableRequestLog": false,
+        "DisableMetadata": true,
+		"CustomApiKey": "Set this to valid value",
+        "WsApiKey": "Set this to valid value",
+        "VariablePrefix": ""
+	},
+
+    "SharePoint": {
+        "SiteUrl": "https://domain.sharepoint.com/sites/sitename",
+        "Auth": {
+            "Token": {
+                "ClientId": "MS Azure Application ID",
+                "ClientSecret": "Value of Client secret",
+                "Scope": "https://domain.sharepoint.com/.default",
+                "TenantId": "MS Azure application tenant id",
+                "UserName": "username",
+                "Password": "password"
+            }
+        }
+    },
+
+    "Hmac": {
+        "Secret": "Set this to valid value" 
+    },
+
+    "Storage": {
+        "Password": "Set this to valid value"
+    },
+
+    "Reference": {
+        "Filter": ["Email"]
+    },
+    
+    "Serilog": {
+        "Using": ["Serilog.Sinks.Seq"],
+        "LevelSwitches": {
+            "$controlSwitch": "Information"
+        },
+        "MinimumLevel": {
+            "ControlledBy": "$controlSwitch",
+            "Override": {
+                "System": "Warning",
+                "Microsoft": "Error"
+            }
+        },
+
+        "WriteTo": [{
+                "Name": "Seq",
+                "Args": {
+                    "serverUrl": "http://global_seq:5341",
+                    "apiKey": ""
+                }
+            }
+        ],
+
+        "Enrich": ["FromLogContext", "WithMachineName", "WithThreadId"],
+        "Properties": {
+            "Application": "EmailWorker"
+        }
+    }
+}
