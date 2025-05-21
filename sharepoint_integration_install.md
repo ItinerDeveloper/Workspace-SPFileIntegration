@@ -43,8 +43,13 @@ Ensure the following files exist in the `SharePointIntegration` folder:
    - .NET CLR Version: No Managed Code
    - Managed Pipeline Mode: Integrated
 
-### 3.3 Website Configuration
+### 3.3 Add IIS Web Application - Website Configuration
 Install the SharePoint Integration on the same site as Itiner Workspace (e.g., `Default Website`).
+1. Open IIS Manager.
+2. Add a new web application with the following settings:
+   - **Alias**: `SharePointIntegration`
+   - **Application Pool**: Select the previously created pool (e.g., `ItinerWorkspace_SharePointIntegration`).
+   - **Physical Path**: `D:\ItinerWorkspace\SharePointIntegration`
 
 ### 3.4 Configuration
 Edit the `appsettings.json` file with the following parameters:
@@ -141,13 +146,6 @@ For information see: [Register an App in Microsoft Identity Platform](https://le
   }
 }
 ```
-
-### 3.5 Add IIS Web Application
-1. Open IIS Manager.
-2. Add a new web application with the following settings:
-   - **Alias**: `SharePointIntegration`
-   - **Application Pool**: Select the previously created pool (e.g., `ItinerWorkspace_SharePointIntegration`).
-   - **Physical Path**: `D:\ItinerWorkspace\SharePointIntegration`
 
 ---
 
