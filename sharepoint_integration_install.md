@@ -62,8 +62,8 @@ Edit the `appsettings.json` file with the following parameters:
   "WSUrl": "http://workspacehost/workspace/api",
   "WsApiKey": "test", // API key generated for integration user
   "HealthCheckBaseUrl": "http://addonhost", // optional
-  "CustomApiKey": "test",
-  "PathBase": "/workspace/spfileintegration",
+  "CustomApiKey": "test", // API key used in the Clients.ApiKey field of the appsettings configuration of Itiner Workspace
+  "PathBase": "/workspace/spfileintegration", // This has to be set according to the path where the addon is installed on IIS
   "DebugMode": false,
   "DisableRequestLog": false,
   "DisableMetadata": true,
